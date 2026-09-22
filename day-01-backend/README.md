@@ -32,7 +32,7 @@ By the end of this project, you should understand:
 
 Before starting, make sure you have installed:
 
-- Node.js 18 or newer
+- Node.js 20.12 or newer (needed for `process.loadEnvFile()`, which loads `.env`)
 - npm (comes with Node.js)
 
 To check if Node is installed:
@@ -60,13 +60,21 @@ Install dependencies:
 npm install
 ```
 
-If you want to run the project in development mode with auto-restart:
+Create a `.env` file in the project folder to pick the port:
+
+```text
+PORT=4000
+```
+
+`server.js` loads this file with `process.loadEnvFile()`, which is built into Node, so no extra package is needed.
+
+Run in development mode with auto-restart:
 
 ```bash
 npm run dev
 ```
 
-If you just want to run it once:
+Or run it once:
 
 ```bash
 npm start
@@ -80,30 +88,45 @@ http://localhost:4000
 
 ---
 
-## Understanding the project
+## How the code is organized
 
-The main file is [server.js](server.js).
-
-That file creates an Express app and starts a server. In a beginner project, the important ideas are:
-
-- app = the backend server
-- route = the URL the client calls
-- request = what the client sends
-- response = what the server sends back
-
-Example idea:
-
-```js
-app.get('/api/notes', (req, res) => {
-  res.json({ message: 'hello from backend' })
-})
+```text
+server.js                  creates the app, registers middleware and routes, starts the server
+src/
+  routes/notes.js          which URL + method calls which controller
+  controllers/notes.js     the logic for each endpoint (list, get, create, update, delete)
+  data/notes.js            the in-memory notes array that stands in for a database
+  middleware/notFound.js   the catch-all 404 response
 ```
 
-This means:
+A request flows through the files like this:
 
-- when someone visits /api/notes
-- the server receives the request
-- it sends back some JSON data
+```text
+server.js -> routes/notes.js -> controllers/notes.js -> data/notes.js
+```
+
+- app = the backend server, created in `server.js`
+- route = the URL the client calls, listed in `src/routes/notes.js`
+- request = what the client sends (`req`)
+- response = what the server sends back (`res`)
+
+In `server.js`, the order matters:
+
+1. `express.json()` parses JSON request bodies into `req.body`.
+2. `app.use('/api/notes', notesRouter)` mounts the notes routes, so `router.get('/:id', ...)`
+   answers `GET /api/notes/:id`.
+3. `app.use(notFound)` runs only if no route matched. It must come *after* the routes.
+4. `app.listen()` starts the server.
+
+Each route in `src/routes/notes.js` is one line:
+
+```js
+router.get('/', listNotes)
+router.post('/', createNote)
+router.get('/:id', getNote)
+router.put('/:id', updateNote)
+router.delete('/:id', deleteNote)
+```
 
 ---
 
@@ -234,85 +257,9 @@ curl -X PUT http://localhost:4000/api/notes/1 \
 curl -X DELETE http://localhost:4000/api/notes/1
 ```
 
----
-
-## Important beginner notes
-
-- The server is running in memory, so the notes reset when the server restarts.
-- This is normal for a learning project.
-- You do not need a database yet.
-- The main goal is to understand how API requests and responses work.
-
----
-
-## Troubleshooting
-
-### The server does not start
-
-Check if Node is installed:
+### Errors
 
 ```bash
-node -v
-```
-
-Then install dependencies again:
-
-```bash
-npm install
-```
-
-### Port is already in use
-
-If port 4000 is blocked, start the server on a different port:
-
-```bash
-PORT=5000 npm start
-```
-
-### Cannot use import syntax
-
-Make sure your package.json has:
-
-```json
-"type": "module"
-```
-
-### Module not found
-
-Run:
-
-```bash
-npm install
-```
-
----
-
-## Next steps
-
-Once you understand this project, the next steps are:
-
-- connect to a database
-- use MongoDB or MySQL
-- add authentication
-- build a frontend with React
-- organize your project into folders
-
-For now, focus on understanding the flow:
-
-Request -> Route -> Logic -> Response
-
-That is the foundation of backend development.
-
----
-
-## Summary
-
-This project is your first backend API. It is simple, but it teaches the core ideas used in almost every modern web app.
-
-If you understand this project, you are already learning the basics of how real applications work.
-
-
-# Errors
 curl http://localhost:4000/api/notes/999          # 404
 curl -X POST http://localhost:4000/api/notes \
   -H "Content-Type: application/json" -d '{}'     # 400, title is required
@@ -323,46 +270,67 @@ skips the body and `req.body` comes back empty, so you'd get a confusing "title 
 
 ---
 
-## How the code is organized
+## Important beginner notes
 
-`server.js` reads top to bottom in the order Express evaluates it:
-
-1. **Setup** — create the app, pick the port, register the `json()` body parser.
-2. **Data** — the `notes` array and `nextId` counter that stand in for a database.
-3. **Routes** — one `app.METHOD(path, handler)` per endpoint. Each handler either sends a response
-   or returns early with an error status.
-4. **Catch-all 404** — `app.use()` with no path runs only if no route above it matched.
-   It must come *after* the routes; move it up and it swallows everything.
-5. **`app.listen()`** — starts the server. Nothing below this line runs until a request arrives.
+- The notes live in memory, so they reset when the server restarts.
+- This is normal for a learning project.
+- You do not need a database yet.
+- The main goal is to understand how API requests and responses work.
 
 ---
 
 ## Troubleshooting
 
 **`EADDRINUSE: address already in use :::4000`**
-Something is already on that port. Either run on a different one (`PORT=4001 npm run dev`) or free it:
+Something is already on that port. Change `PORT` in `.env`, or free the port:
 
 ```bash
 lsof -ti:4000 | xargs kill
 ```
 
+**The server ignores the port in `.env`**
+Make sure `.env` sits next to `server.js` and you start the server from that folder.
+`process.loadEnvFile()` needs Node 20.12 or newer (`node -v`).
+
 **`Cannot use import statement outside a module`**
-`"type": "module"` is missing from `package.json` (step 4).
+Make sure `package.json` has `"type": "module"`.
 
 **`Cannot find module 'express'`**
-Run `npm install` / `yarn`. If it still fails, delete `node_modules/` plus your lockfile
-(`package-lock.json` or `yarn.lock`) and install again.
+Run `npm install`. If it still fails, delete `node_modules/` and `package-lock.json` and install again.
+
+**`Cannot find module '.../src/...'`**
+ES modules need the full file name in imports, including `.js`: `'./src/routes/notes.js'`.
 
 **`nodemon: command not found`**
-Run `npm install` / `yarn` so devDependencies are installed. Always start it via `npm run dev` or
-`yarn dev` — that resolves nodemon from `node_modules/.bin/`, which a bare `nodemon server.js` does not.
+Run `npm install` so devDependencies are installed, then start with `npm run dev`.
 
 **Changes don't show up**
-`npm start` / `yarn start` doesn't reload. Use `npm run dev` / `yarn dev`, or restart manually.
-
-**Both `package-lock.json` and `yarn.lock` exist**
-Someone mixed package managers. Pick one, delete the other lockfile along with `node_modules/`,
-then reinstall with the manager you kept.
+`npm start` doesn't reload. Use `npm run dev`, or restart manually.
 
 **A note I created disappeared**
-The array is in memory. Restarting the server wipes it. Persisting data is the next day's work.
+The array is in memory. Restarting the server wipes it.
+
+---
+
+## Next steps
+
+Once you understand this project, the next steps are:
+
+- connect to a database (MongoDB with Mongoose)
+- replace `src/data/notes.js` with a database model
+- add authentication
+- build a frontend with React
+
+For now, focus on understanding the flow:
+
+Request -> Route -> Controller -> Response
+
+That is the foundation of backend development.
+
+---
+
+## Summary
+
+This project is your first backend API. It is simple, but it teaches the core ideas used in almost every modern web app.
+
+If you understand this project, you are already learning the basics of how real applications work.
