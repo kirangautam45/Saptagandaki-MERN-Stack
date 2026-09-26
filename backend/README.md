@@ -51,7 +51,7 @@ If you see version numbers, you are ready to begin.
 Open your terminal and go to the project folder:
 
 ```bash
-cd day-01-backend
+cd backend
 ```
 
 Install dependencies:
