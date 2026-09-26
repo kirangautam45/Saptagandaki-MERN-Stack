@@ -2,9 +2,10 @@
 
 A small Android app that talks to the `day-02-mongodb` Notes API.
 
-- Tap **Add note** to create a note
+- Tap **+** to create a note
 - Tap a note to edit it
 - Long-press a note to delete it
+- Pull the list down to reload notes from the API
 
 ## Run it
 

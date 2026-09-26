@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -21,6 +23,7 @@ public class MainActivity extends Activity {
     private final ExecutorService background = Executors.newSingleThreadExecutor();
     private final List<Note> notes = new ArrayList<>();
     private ArrayAdapter<Note> adapter;
+    private SwipeRefreshLayout swipe;
 
     interface Work<T> {
         T run() throws Exception;
@@ -35,13 +38,15 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new ArrayAdapter<Note>(this, android.R.layout.simple_list_item_2, android.R.id.text1, notes) {
+        adapter = new ArrayAdapter<Note>(this, R.layout.item_note, R.id.title, notes) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View row = super.getView(position, convertView, parent);
                 Note note = getItem(position);
-                ((TextView) row.findViewById(android.R.id.text1)).setText(note.title);
-                ((TextView) row.findViewById(android.R.id.text2)).setText(note.body);
+                ((TextView) row.findViewById(R.id.title)).setText(note.title);
+                TextView body = row.findViewById(R.id.body);
+                body.setText(note.body);
+                body.setVisibility(note.body == null || note.body.isEmpty() ? View.GONE : View.VISIBLE);
                 return row;
             }
         };
@@ -55,8 +60,13 @@ public class MainActivity extends Activity {
             return true;
         });
 
+        swipe = findViewById(R.id.swipe);
+        swipe.setColorSchemeResources(R.color.primary);
+        swipe.setOnRefreshListener(this::loadNotes);
+        // The list sits inside a FrameLayout, so tell the swipe when the list itself can still scroll up
+        swipe.setOnChildScrollUpCallback((parent, child) -> list.canScrollVertically(-1));
+
         findViewById(R.id.add).setOnClickListener(v -> showNoteDialog(null));
-        findViewById(R.id.refresh).setOnClickListener(v -> loadNotes());
 
         loadNotes();
     }
@@ -74,16 +84,22 @@ public class MainActivity extends Activity {
                 T result = work.run();
                 runOnUiThread(() -> done.accept(result));
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show());
+                runOnUiThread(() -> {
+                    swipe.setRefreshing(false);
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                });
             }
         });
     }
 
     private void loadNotes() {
+        swipe.setRefreshing(true);
         call(NotesApi::list, result -> {
+            swipe.setRefreshing(false);
             notes.clear();
             notes.addAll(result);
             adapter.notifyDataSetChanged();
+            ((TextView) findViewById(R.id.count)).setText(notes.size() + (notes.size() == 1 ? " note" : " notes"));
         });
     }
 
