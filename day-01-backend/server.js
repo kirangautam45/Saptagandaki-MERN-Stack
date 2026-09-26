@@ -1,5 +1,4 @@
 import express from 'express'
-import { notes } from './src/data/notes.js'
 import notesRouter from './src/routes/notes.js'
 import notFound from './src/middleware/notFound.js'
 
@@ -11,7 +10,7 @@ const PORT = process.env.PORT || 4001
 app.use(express.json())
 
 app.get('/', (_req, res) => {
-  res.json({ status: 'ok', notes: notes.length })
+  res.json({ status: 'ok'})
 })
 
 app.use('/api/notes', notesRouter)
