@@ -1,5 +1,44 @@
 # MERN Stack — 45-Day Course
 
+**A free, open-source curriculum that takes you from zero Node.js to a deployed full-stack MERN app in 45 classes.**
+
+[![GitHub stars](https://img.shields.io/github/stars/kirangautam45/Saptagandaki-MERN-Stack?style=social)](https://github.com/kirangautam45/Saptagandaki-MERN-Stack/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#contributing)
+![Stack](https://img.shields.io/badge/stack-MongoDB%20%C2%B7%20Express%20%C2%B7%20React%20%C2%B7%20Node-blue)
+
+> ⭐ **If this course helps you learn or teach, please star the repo** — it helps other students find it.
+
+**Jump to:** [What's in this repo](#whats-in-this-repo) · [Day-by-day topics](TOPICS.md) · [Course structure](#course-structure) · [Contributing](#contributing)
+
+## What's in this repo
+
+| Folder | What it is | Stack |
+|---|---|---|
+| [`day-01-backend/`](day-01-backend) | Beginner Notes API — full CRUD with in-memory data, split into routes, controllers and data | Node · Express |
+| [`helpdesk-api/`](helpdesk-api) | Support-ticket backend with sign-up, login and protected routes | Express · MongoDB · Mongoose · JWT |
+| [`helpdesk-client/`](helpdesk-client) | React front end for the helpdesk API with auth context and protected pages | React · Vite · Axios |
+| [`TOPICS.md`](TOPICS.md) | Full 45-day plan: objectives, teaching notes and homework for every class | — |
+
+### Quick start
+
+```bash
+git clone https://github.com/kirangautam45/Saptagandaki-MERN-Stack.git
+cd Saptagandaki-MERN-Stack
+
+# Beginner Notes API (no database needed)
+cd day-01-backend && npm install && npm run dev
+```
+
+To run the full-stack helpdesk app, start the API first, then the client:
+
+```bash
+cd helpdesk-api && npm install && cp .env.example .env && npm run dev      # set MONGO_URI and JWT_SECRET in .env
+cd helpdesk-client && npm install && cp .env.example .env && npm run dev   # in a second terminal
+```
+
+## About the course
+
 A 45-day, class-paced course that goes from zero Node.js to a deployed full-stack MERN application. Each day is sized for a **50-minute class** (roughly 35 min teaching + 15 min live coding / Q&A), with homework carrying the rest.
 
 - **Duration:** 45 classes (~9 weeks at 5 classes/week)
@@ -120,3 +159,21 @@ Deliberately **out of scope** to fit 45 classes:
 - Docker, CI/CD pipelines, WebSockets
 
 Each of these is a natural follow-on module if the course is extended.
+
+## Contributing
+
+Found a typo, a bug in the example code, or have an idea for a better exercise? Contributions are welcome:
+
+1. Fork the repo and create a branch: `git checkout -b fix/day-12-typo`
+2. Make your change and commit it with a clear message
+3. Open a pull request describing what you changed and why
+
+Teachers using this course: open an issue to share what worked in your class and what didn't.
+
+## License
+
+Released under the [MIT License](LICENSE) — free to use, adapt and teach from. Attribution is appreciated.
+
+---
+
+<p align="center">Made with ❤️ by <a href="https://github.com/kirangautam45">Kiran Gautam</a> · <a href="https://kirangtm.com.np/">kirangtm.com.np</a><br>⭐ Star the repo if you found it useful!</p>
