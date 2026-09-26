@@ -1,6 +1,6 @@
 # Notes Android (Java)
 
-A small Android app that talks to the `day-02-mongodb` Notes API.
+A small Android app that talks to the `notes-api` Notes API.
 
 - Tap **+** to create a note
 - Tap a note to edit it
@@ -9,7 +9,7 @@ A small Android app that talks to the `day-02-mongodb` Notes API.
 
 ## Run it
 
-1. Start the API: `cd ../day-02-mongodb && npm run dev` (it listens on port 4002)
+1. Start the API: `cd ../notes-api && npm run dev` (it listens on port 4002)
 2. Open this folder in Android Studio and let Gradle sync
 3. Start an emulator and press **Run**
 

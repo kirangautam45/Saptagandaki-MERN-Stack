@@ -1,6 +1,6 @@
 # Day 02 — Notes API with MongoDB
 
-Same Notes API as `day-01-backend`, but notes are saved in MongoDB, so they survive a restart.
+Same Notes API as `backend`, but notes are saved in MongoDB, so they survive a restart.
 
 ## Run it
 

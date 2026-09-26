@@ -1,8 +1,8 @@
 {
-  "name": "day-02-mongodb",
+  "name": "notes-api",
   "version": "1.0.0",
   "private": true,
-  "description": "The day-01 Notes API, now saving notes in MongoDB with Mongoose",
+  "description": "The backend Notes API, now saving notes in MongoDB with Mongoose",
   "main": "server.js",
   "type": "module",
   "scripts": {
