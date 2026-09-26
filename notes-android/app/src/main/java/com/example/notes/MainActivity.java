@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -38,11 +39,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new ArrayAdapter<Note>(this, R.layout.item_note, R.id.title, notes) {
+        adapter = new ArrayAdapter<>(this, R.layout.item_note, R.id.title, notes) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 View row = super.getView(position, convertView, parent);
                 Note note = getItem(position);
+                assert note != null;
                 ((TextView) row.findViewById(R.id.title)).setText(note.title);
                 TextView body = row.findViewById(R.id.body);
                 body.setText(note.body);
@@ -99,7 +102,7 @@ public class MainActivity extends Activity {
             notes.clear();
             notes.addAll(result);
             adapter.notifyDataSetChanged();
-            ((TextView) findViewById(R.id.count)).setText(notes.size() + (notes.size() == 1 ? " note" : " notes"));
+            ((TextView) findViewById(R.id.count)).setText(getResources().getQuantityString(R.plurals.note_count, notes.size(), notes.size()));
         });
     }
 
@@ -114,26 +117,26 @@ public class MainActivity extends Activity {
         }
 
         new AlertDialog.Builder(this)
-                .setTitle(note == null ? "New note" : "Edit note")
+                .setTitle(note == null ? R.string.new_note : R.string.edit_note)
                 .setView(form)
-                .setPositiveButton("Save", (dialog, which) -> {
+                .setPositiveButton(R.string.save, (dialog, which) -> {
                     String t = title.getText().toString();
                     String b = body.getText().toString();
                     call(() -> note == null ? NotesApi.create(t, b) : NotesApi.update(note.id, t, b),
                             saved -> loadNotes());
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
     private void confirmDelete(Note note) {
         new AlertDialog.Builder(this)
-                .setTitle("Delete \"" + note.title + "\"?")
-                .setPositiveButton("Delete", (dialog, which) -> call(() -> {
+                .setTitle(getString(R.string.delete_note, note.title))
+                .setPositiveButton(R.string.delete, (dialog, which) -> call(() -> {
                     NotesApi.delete(note.id);
                     return null;
                 }, done -> loadNotes()))
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 }

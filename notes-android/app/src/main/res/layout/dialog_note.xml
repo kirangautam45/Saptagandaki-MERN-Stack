@@ -10,8 +10,9 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:background="@drawable/input"
-        android:hint="Title"
+        android:hint="@string/title_hint"
         android:inputType="textCapSentences"
         android:padding="14dp"
         android:textStyle="bold" />
@@ -21,9 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:autofillHints=""
         android:background="@drawable/input"
         android:gravity="top"
-        android:hint="Write something…"
+        android:hint="@string/body_hint"
         android:inputType="textMultiLine|textCapSentences"
         android:minLines="4"
         android:padding="14dp" />

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_notes">My notes</string>
+    <string name="empty_notes">No notes yet\nTap + to write one, or pull down to refresh</string>
+    <string name="add_note">Add note</string>
+    <string name="add">+</string>
+    <string name="title_hint">Title</string>
+    <string name="body_hint">Write something…</string>
+    <string name="new_note">New note</string>
+    <string name="edit_note">Edit note</string>
+    <string name="delete_note">Delete \"%s\"?</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <plurals name="note_count">
+        <item quantity="one">%d note</item>
+        <item quantity="other">%d notes</item>
+    </plurals>
+</resources>

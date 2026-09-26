@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A note sheet with a folded corner, drawn inside the 66dp safe zone of the 108dp icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M39,31H62L72,41V74Q72,77 69,77H39Q36,77 36,74V34Q36,31 39,31Z" />
+    <path
+        android:fillColor="#C7D2FE"
+        android:pathData="M62,31V38Q62,41 65,41H72Z" />
+    <path
+        android:pathData="M43,51H65M43,59H65M43,67H56"
+        android:strokeColor="@color/primary"
+        android:strokeLineCap="round"
+        android:strokeWidth="3.5" />
+</vector>
