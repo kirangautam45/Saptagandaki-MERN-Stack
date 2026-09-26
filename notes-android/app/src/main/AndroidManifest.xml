@@ -5,6 +5,7 @@
 
     <!-- usesCleartextTraffic lets the app call http:// (not https) during development -->
     <application
+        android:icon="@mipmap/ic_launcher"
         android:label="Notes"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">

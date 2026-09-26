@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-// Talks to the day-02 Notes API. Every method blocks, so call them off the main thread.
 public class NotesApi {
     // 10.0.2.2 is your computer's localhost as seen from the Android emulator.
     // On a real phone, use your computer's Wi-Fi IP instead, e.g. http://192.168.1.20:4002
@@ -62,7 +61,6 @@ public class NotesApi {
         String text = read(status < 400 ? conn.getInputStream() : conn.getErrorStream());
         conn.disconnect();
 
-        // The API sends errors as { "error": "..." }
         if (status >= 400) {
             String message = text.startsWith("{") ? new JSONObject(text).optString("error") : "";
             throw new Exception(message.isEmpty() ? "HTTP " + status : message);

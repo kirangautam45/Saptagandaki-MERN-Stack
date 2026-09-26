@@ -13,6 +13,9 @@ A small Android app that talks to the `day-02-mongodb` Notes API.
 2. Open this folder in Android Studio and let Gradle sync
 3. Start an emulator and press **Run**
 
+Or skip Android Studio: `./run.sh` boots the emulator, builds, installs and opens the app.
+Set `AVD=<name>` to pick an emulator (`emulator -list-avds` lists them).
+
 The app calls `http://10.0.2.2:4002/api/notes`. Inside the emulator, `10.0.2.2` means
 "the computer running the emulator", so it reaches your local API.
 
