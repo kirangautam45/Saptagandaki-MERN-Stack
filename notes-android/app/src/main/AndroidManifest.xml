@@ -6,7 +6,7 @@
     <!-- usesCleartextTraffic lets the app call http:// (not https) during development -->
     <application
         android:label="Notes"
-        android:theme="@android:style/Theme.Material.Light.DarkActionBar"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
