@@ -16,7 +16,7 @@ import java.util.List;
 public class NotesApi {
     // 10.0.2.2 is your computer's localhost as seen from the Android emulator.
     // On a real phone, use your computer's Wi-Fi IP instead, e.g. http://192.168.1.20:4002
-    private static final String BASE_URL = "http://10.0.2.2:4002/api/notes";
+    private static final String BASE_URL = "https://saptagandaki-mern-stack.onrender.com/api/notes";
 
     public static List<Note> list() throws Exception {
         JSONArray array = new JSONArray(request("GET", BASE_URL, null));
