@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import express from 'express'
 import mongoose from 'mongoose'
 import { connectDB } from './src/database/db.js'
@@ -5,7 +6,7 @@ import Note from './src/models/Note.js'
 import notesRouter from './src/routes/notes.js'
 import notFound from './src/middleware/notFound.js'
 
-process.loadEnvFile()
+if (existsSync('.env')) process.loadEnvFile()
 
 const app = express()
 const PORT = process.env.PORT || 4009
